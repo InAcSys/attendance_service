@@ -3,6 +3,7 @@ import { Response } from "../models/general";
 import {
   createAttendance,
   getAttendance,
+  getAttendanceByStudentId,
 } from "../services/attendance.service";
 
 type IdParamsContext = {
@@ -14,6 +15,16 @@ type IdParamsContext = {
 
 type CreateContext = {
   body: Attendance;
+};
+
+type GetAttendanceByStudentContext = {
+  params: {
+    studentId: string;
+  };
+  query: {
+    subjectId: string;
+    tenantId: string;
+  };
 };
 
 type CreateAttendancesContext = {
@@ -100,5 +111,28 @@ export const createAttendancesBySubjectId = async ({
     return {
       message: "Attendance registration was not completed successfully.",
       status: 400,
+    };
+};
+
+export const getAttendanceByStudent = async ({
+  params,
+  query,
+}: GetAttendanceByStudentContext) => {
+  const response = await getAttendanceByStudentId(
+    params.studentId,
+    query.subjectId,
+    query.tenantId
+  );
+
+  if (response)
+    return {
+      message: "Attendance found",
+      data: response,
+      status: 200,
+    };
+  else
+    return {
+      message: "Attendance not found",
+      status: 404,
     };
 };

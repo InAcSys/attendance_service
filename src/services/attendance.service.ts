@@ -62,3 +62,25 @@ export const createAttendance = async (attendance: Attendance) => {
 
   return response;
 };
+
+export const getAttendanceByStudentId = async (
+  studentId: string,
+  subjectId: string,
+  tenantId: string
+) => {
+  const results = await db
+    .select()
+    .from(attendances)
+    .where(
+      and(
+        eq(attendances.userId, studentId),
+        eq(attendances.subjectId, subjectId),
+        eq(attendances.tenantId, tenantId),
+        eq(attendances.isActive, true)
+      )
+    );
+
+  const attendance = results[0];
+
+  return attendance ?? null;
+};

@@ -2,6 +2,7 @@ import Elysia, { t } from "elysia";
 import {
   create,
   createAttendancesBySubjectId,
+  getAttendanceByStudent,
   show,
 } from "../controllers/attendance.controller";
 
@@ -9,6 +10,7 @@ export const attendanceRoutes = new Elysia({
   prefix: "/api/attendance",
 })
   .get("/:id", show)
+  .get("/student/:studentId", getAttendanceByStudent)
   .post("/", create, {
     body: t.Object({
       userId: t.String(),
